@@ -55,7 +55,7 @@ public class TaskController {
     public ResponseEntity<Page<TaskResponseDTO>> getAllTasks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "createAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir) {
 
         log.info("Received request to get all tasks - page: {}, size: {}", page, size);

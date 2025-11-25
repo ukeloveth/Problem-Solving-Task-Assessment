@@ -156,10 +156,10 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findByCode(code)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with code: " + code));
 
-        // Check if task has children
-        if (!task.getChildren().isEmpty()) {
+        List<Task> children = taskRepository.findByParentCode(code);
+        if (!children.isEmpty()) {
             throw new ValidationException(
-                    "Cannot delete task: Task has " + task.getChildren().size() + " child task(s). " +
+                    "Cannot delete task: Task has " + children.size() + " child task(s). " +
                             "Please delete or reassign child tasks first."
             );
         }
