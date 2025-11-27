@@ -17,11 +17,13 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    Optional<Task> findByCode(String code);
+    @Query("SELECT t FROM Task t LEFT JOIN FETCH t.children WHERE t.code = :code")
+    Optional<Task> findByCode(@Param("code") String code);
 
+    @Query("SELECT DISTINCT t FROM Task t LEFT JOIN FETCH t.children")
     Page<Task> findAll(Pageable pageable);
 
-    @Query("SELECT t FROM Task t WHERE t.parent.code = :parentCode")
+    @Query("SELECT t FROM Task t JOIN FETCH t.parent p WHERE p.code = :parentCode")
     List<Task> findByParentCode(@Param("parentCode") String parentCode);
     
 

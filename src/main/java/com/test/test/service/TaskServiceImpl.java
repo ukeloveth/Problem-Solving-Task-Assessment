@@ -76,7 +76,15 @@ public class TaskServiceImpl implements TaskService {
         Task savedTask = taskRepository.save(task);
         log.info("Task created successfully with code: {}", savedTask.getCode());
 
-        return convertToDTO(savedTask);
+        taskRepository.flush();
+        
+        // Reload the saved task with children fetched
+        Task taskWithChildren = taskRepository.findByCode(savedTask.getCode())
+                .orElse(savedTask);
+        
+        log.info("Task created successfully with code: {}", taskWithChildren.getCode());
+
+        return convertToDTO(taskWithChildren);
     }
 
     @Override
@@ -145,7 +153,12 @@ public class TaskServiceImpl implements TaskService {
         Task updatedTask = taskRepository.save(task);
         log.info("Task updated successfully with code: {}", updatedTask.getCode());
 
-        return convertToDTO(updatedTask);
+        taskRepository.flush();
+        
+        Task taskWithChildren = taskRepository.findByCode(updatedTask.getCode())
+                .orElse(updatedTask);
+
+        return convertToDTO(taskWithChildren);
     }
 
 
